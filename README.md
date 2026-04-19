@@ -7,12 +7,18 @@ and Klipper API integration.
 Modified and extended by me :) [drc85]
 
 you need
+
 -ws2812 or similar led strip with 16 led for 27cm!
+
 -esp32 or similar 
+
 i recommend this easy plug and play usb wled controller from aliexpress
 https://de.aliexpress.com/item/1005010502929150.html
+
 -the led moutn for under the plate
 (makerworld link will follow)
+
+
 
 instructions:
 
