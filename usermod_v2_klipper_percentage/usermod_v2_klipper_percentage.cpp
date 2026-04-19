@@ -16,40 +16,31 @@ private:
   static const char _name[];
   bool enabled = true;
 
-  uint8_t base = 20;
+  uint8_t base = 40; // Hintergrund hell (weißlich)
 
   void fillAll(uint32_t color) {
     uint16_t count = strip.getLengthTotal();
     for (uint16_t i = 0; i < count; i++) strip.setPixelColor(i, color);
   }
 
-  // 👉 APPLE STYLE PROGRESS
+  // 👉 CLEAN PROGRESS BAR
   void drawProgressBar(float p) {
     uint16_t count = strip.getLengthTotal();
     if (count == 0) return;
 
     p = constrain(p, 0.0f, 1.0f);
 
-    float pos = p * count;
-    int head = max(0, (int)pos);
+    // 👉 mindestens 1 LED immer aktiv
+    uint16_t lit = max(1, (uint16_t)(p * count));
 
-    for (int i = 0; i < count; i++) {
-      float dist = head - i;
-
-      if (dist >= 0) {
-        // Verlauf hinter Kopf
-        float fade = exp(-dist * 0.35f); // weich
-        uint8_t g = base + (uint8_t)(fade * 235);
-        strip.setPixelColor(i, RGBW32(0, g, 0, 0));
+    for (uint16_t i = 0; i < count; i++) {
+      if (i < lit) {
+        // Fortschritt = grün
+        strip.setPixelColor(i, RGBW32(0,255,0,0));
       } else {
-        // Hintergrund Glow
-        strip.setPixelColor(i, RGBW32(0, base, 0, 0));
+        // Hintergrund = leicht weiß
+        strip.setPixelColor(i, RGBW32(base, base, base, 0));
       }
-    }
-
-    // extra heller Kopf
-    if (head >= 0 && head < count) {
-      strip.setPixelColor(head, RGBW32(120, 255, 120, 0));
     }
   }
 
@@ -133,7 +124,7 @@ public:
       completeUntil = 0;
     }
 
-    // 🟡 Preheat extended
+    // 🟡 Preheat (extended)
     if (ps == "printing" && progress < 0.01f) {
       uint8_t r = base + (uint8_t)(200 * pulse);
       uint8_t g = base + (uint8_t)(100 * pulse);
@@ -141,7 +132,7 @@ public:
       return;
     }
 
-    // 🟢 Printing → Apple Style
+    // 🟢 Printing
     if (ps == "printing") {
       drawProgressBar(progress);
       return;
