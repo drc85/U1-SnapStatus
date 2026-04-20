@@ -1,4 +1,4 @@
-# BAMBU AND Snapmaker U1 WLED Status Bar
+#Snapmaker U1 WLED Status Bar
 WLED-based LED status bar for the Snapmaker U1.
 
 Based on the WLED v2 usermod *Klipper Percentage*  
@@ -35,7 +35,7 @@ Modified and extended by me **drc85**
 NOTE: 
 -FOR KLIPPER - you have to be on Paxx FW 
 → https://github.com/paxx12/SnapmakerU1-Extended-Firmware
--FOR BAMBU - enable LAN MODE
+
 
 ### 1. Flash firmware
 - Download `firmware.bin`:  
@@ -50,13 +50,10 @@ NOTE:
 - Navigate to **Usermods**
 - New section: **SnapmakerU1**
 
-**select:**
--BAMBU or KLIPPER
-
 **Enter:**
 - Printer IP  
-- API Key *(optional, leave empty if not used)*for klipper
-- *for BAMBU -acces code
+- API Key *(optional, leave empty if not used)
+
 
 ➡️ Reboot the device (setup takes max ~10 minutes)
 
