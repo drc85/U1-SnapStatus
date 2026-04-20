@@ -30,21 +30,49 @@ Modified and extended by me **drc85**
 
 ## 🚀 Installation
 
-1. Download `firmware.bin` — https://github.com/drc85/snapmakerU1-wled-stauts-bar
-2. Flash it to your ESP32 (there are a ton of tutorials online)
-3. Set up WiFi in WLED
+### 1. Flash firmware
+- Download `firmware.bin`:  
+  https://github.com/drc85/snapmakerU1-wled-stauts-bar
+- Flash it to your ESP32 (e.g. via esptool or web flasher)
 
-3.1. After flashing: Open WLED UI - Navigate to **Usermods**- A new section called **SnapmakerU1** will appear
+### 2. Set up WLED
+- Connect to WiFi
+- Open WLED Web UI
 
-3.2. Enter: Printer IP - API key (optional, leave empty if not used) Reboot the device.
-----takes maximal 10minutes!!!
-4. print case (two options availible - under the build plate and directly on the bottom of the printer)
- → https://makerworld.com/de/models/2686608-snapmaker-u1-led-status-bar-wled-esp32-gledopto#profileId-2976228
-5. place controller and led inside
-6. screw on the top part
-7. add some 3M vhb tape and stick it on 
-8. place it inside the printer
-9. drill a hole in the floor, backwall or fiddle it thorugh the side wall ( with the buildplate cable) and drill lthe hole on the back
+### 3. Configure Usermod
+- Navigate to **Usermods**
+- New section: **SnapmakerU1**
+
+**Enter:**
+- Printer IP  
+- API Key *(optional, leave empty if not used)*  
+
+➡️ Reboot the device (setup takes max ~10 minutes)
+
+---
+
+### 4. Print case
+- MakerWorld:  
+  https://makerworld.com/de/models/2686608-snapmaker-u1-led-status-bar-wled-esp32-gledopto#profileId-2976228
+
+**Available options:**
+- Under the build plate  
+- Directly on the bottom of the printer  
+
+---
+
+### 5. Assemble hardware
+1. Place controller and LED inside  
+2. Screw on the top part  
+3. Add 3M VHB tape  
+4. Mount it inside the printer  
+
+---
+
+### 6. Cable routing
+- Drill a hole (bottom or back wall)  
+**or**  
+- Route the cable through the side (with the build plate cable)
 
  ---
  
