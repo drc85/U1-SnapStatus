@@ -13,7 +13,7 @@ private:
   bool heating = false;
 
   unsigned long completeUntil = 0;
-  bool completeTriggered = false; // 👉 FIX
+  bool completeTriggered = false;
 
   static const char _name[];
   bool enabled = true;
@@ -39,19 +39,29 @@ private:
     }
   }
 
+  // 👉 FIXED VERSION
   void updateSnapmakerStatus() {
-    if (snapIp.isEmpty() || WiFi.status() != WL_CONNECTED) return;
+    if (snapIp.isEmpty() || WiFi.status() != WL_CONNECTED) {
+      ps = "error";
+      return;
+    }
 
     HTTPClient http;
     String url = "http://" + snapIp + ":" + String(snapPort) +
                  "/printer/objects/query?print_stats&display_status&heater_bed&extruder";
 
-    if (!http.begin(url)) return;
+    if (!http.begin(url)) {
+      ps = "error";
+      return;
+    }
+
     if (!apiKey.isEmpty()) http.addHeader("X-Api-Key", apiKey);
 
     int code = http.GET();
+
     if (code == 200) {
       StaticJsonDocument<2048> doc;
+
       if (!deserializeJson(doc, http.getStream())) {
 
         JsonObject status = doc["result"]["status"];
@@ -66,7 +76,6 @@ private:
 
         heating = (bt > bc + 2.0f) || (et > ec + 2.0f);
 
-        // 👉 FIX: Complete nur einmal triggern
         if (ps == "complete") {
           if (!completeTriggered) {
             completeUntil = millis() + 10000;
@@ -76,7 +85,12 @@ private:
           completeTriggered = false;
           completeUntil = 0;
         }
+
+      } else {
+        ps = "error"; // JSON Fehler
       }
+    } else {
+      ps = "error"; // HTTP Fehler
     }
 
     http.end();
@@ -121,7 +135,6 @@ public:
         fillAll(RGBW32(0,v,0,0));
         return;
       } else {
-        // 👉 nach Ablauf zurücksetzen
         completeUntil = 0;
         ps = "idle";
       }
