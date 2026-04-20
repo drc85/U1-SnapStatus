@@ -15,8 +15,8 @@ you need
 i recommend this easy plug and play usb wled controller from aliexpress
 https://de.aliexpress.com/item/1005010502929150.html
 
--the led moutn for under the plate
-(makerworld link will follow)
+-the led mount for under the plate
+(https://makerworld.com/de/models/2686608-snapmaker-u1-led-status-bar-wled-esp32-gledopto#profileId-2976228)
 
 
 
