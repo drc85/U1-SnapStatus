@@ -8,7 +8,8 @@ Modified and extended by me **drc85**
 
 ---
 
- 
+<img width="720" height="960" alt="676632991_3969606846517215_7601965848291422590_n" src="https://github.com/user-attachments/assets/52d1cf9e-55b8-4beb-8536-9b3d8c29c9f0" />
+
 
 ## 🔧 Requirements
 
@@ -18,7 +19,9 @@ Modified and extended by me **drc85**
 - Optional: ready-to-use USB WLED controller  
  → https://de.aliexpress.com/item/1005010502929150.html
 - 3 x 5mm - m3 pointed flathead screws
-- double sided 3M VHB tape 
+- double sided 3M VHB tape
+- led mounting case  (two options availible - under the build plate and directly on the bottom of the printer)
+ → https://makerworld.com/de/models/2686608-snapmaker-u1-led-status-bar-wled-esp32-gledopto#profileId-2976228
 
 
 
