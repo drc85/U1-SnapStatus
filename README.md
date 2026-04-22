@@ -86,12 +86,14 @@ NOTE:
  
 ## 🚦 LED States
 
+## 🌊 Startup Animation (16 LEDs)
+
 **⚪ Idle**  
 White breathing (smooth pulse)
 
 **🟡 Preparing / Preheat**  
 Orange running light (→)  
-Pattern: 50% – 50% – 75% – 100% – 50%
+Pattern: 50% – 50% – 75% – 100% -100% – 50%
 
 **🟢 Printing**  
 Green progress bar  
@@ -106,24 +108,6 @@ Blue running light (same pattern as preheat)
 Fast red blinking (on/off)
 
 **🟢 Complete**  
-Fast green blinking (~10s) → returns to Idle
+Fast green blinking (~20s) → returns to Idle
 
 ---
-
-## 🌊 Startup Animation (16 LEDs)
-
-- Outside → center (0+15 → 7+8)  
-- Center holds briefly  
-- Expands back outward  
-- Short full-white phase  
-- Seamless transition into Idle  
-
----
-
-## ✨ Features
-
-- Stable preheat detection (no early green)
-- Smooth idle breathing
-- No WiFi flicker / false error
-- Clean symmetric animations (16 LEDs)
-- Visual feedback on progress steps
