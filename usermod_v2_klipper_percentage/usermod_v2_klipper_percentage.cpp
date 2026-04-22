@@ -153,7 +153,7 @@ private:
 
         if (ps == "complete") {
           if (!completeTriggered) {
-            completeUntil = millis() + 10000;
+            completeUntil = millis() + 20000;
             completeTriggered = true;
           }
         } else {
