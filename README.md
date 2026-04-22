@@ -1,4 +1,7 @@
-#Snapmaker U1 WLED Status Bar
+#Snapmaker U1 WLED Status Bar 
+-----------------------------
+Snapstatus
+---------------------------
 WLED-based LED status bar for the Snapmaker U1.
 
 Based on the WLED v2 usermod *Klipper Percentage*  
