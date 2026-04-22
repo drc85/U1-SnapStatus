@@ -17,13 +17,9 @@ private:
 
   unsigned long lastOk = 0;
 
+  // Startup
   bool startupActive = true;
   unsigned long startupStart = 0;
-
-  // 👉 NEU (nur für progress blink)
-  int lastLit = -1;
-  int blinkIndex = -1;
-  unsigned long blinkUntil = 0;
 
   static const char _name[];
 
@@ -40,7 +36,7 @@ private:
     fillAll(RGBW32(v,v,v,0));
   }
 
-  // 🔥 NUR DAS geändert
+  // 🔥 geändert: running light pattern
   void runningLight(uint8_t r, uint8_t g, uint8_t b) {
     uint16_t n = strip.getLengthTotal();
     uint16_t pos = (millis() / 150) % n;
@@ -56,14 +52,16 @@ private:
     }
   }
 
-  // 🔥 NUR DAS erweitert
+  // 🔥 geändert: neue LED blinkt 2x
   void drawProgressBar(float p) {
     uint16_t n = strip.getLengthTotal();
     uint16_t lit = max((uint16_t)1, (uint16_t)(p * n));
 
-    if (lastLit == -1) {
-      lastLit = lit - 1;
-    } else if ((int)lit - 1 != lastLit) {
+    static int lastLit = -1;
+    static int blinkIndex = -1;
+    static unsigned long blinkUntil = 0;
+
+    if ((int)lit - 1 != lastLit) {
       blinkIndex = lit - 1;
       blinkUntil = millis() + 400;
       lastLit = lit - 1;
@@ -79,7 +77,7 @@ private:
           strip.setPixelColor(i, RGBW32(0,255,0,0));
         }
       } else {
-        strip.setPixelColor(i, RGBW32(80,80,80,0)); // dunkler
+        strip.setPixelColor(i, RGBW32(180,180,180,0)); // unverändert
       }
     }
   }
@@ -226,6 +224,23 @@ public:
     }
 
     idlePulse();
+  }
+
+  void addToConfig(JsonObject &root) override {
+    JsonObject top = root.createNestedObject(FPSTR(_name));
+    top["ip"] = snapIp;
+    top["port"] = snapPort;
+    top["api"] = apiKey;
+  }
+
+  bool readFromConfig(JsonObject &root) override {
+    JsonObject top = root[FPSTR(_name)];
+    if (top.isNull()) return false;
+
+    snapIp = top["ip"] | "";
+    snapPort = top["port"] | 7125;
+    apiKey = top["api"] | "";
+    return true;
   }
 
   uint16_t getId() override { return 0xBEEF; }
