@@ -17,7 +17,6 @@ private:
 
   unsigned long lastOk = 0;
 
-  // Startup
   bool startupActive = true;
   unsigned long startupStart = 0;
 
@@ -36,7 +35,7 @@ private:
     fillAll(RGBW32(v,v,v,0));
   }
 
-  // 🔥 geändert: running light pattern
+  // 🔥 NEU: 50-50-75-100-100-50
   void runningLight(uint8_t r, uint8_t g, uint8_t b) {
     uint16_t n = strip.getLengthTotal();
     uint16_t pos = (millis() / 150) % n;
@@ -44,15 +43,22 @@ private:
     for (uint16_t i = 0; i < n; i++) {
       int d = (int)i - (int)pos;
 
-      if (d == 0) strip.setPixelColor(i, RGBW32(r,g,b,0));                 // 100%
-      else if (d == -1) strip.setPixelColor(i, RGBW32(r*3/4,g*3/4,b*3/4,0));// 75%
-      else if (d == -2 || d == 1 || d == 2)
-        strip.setPixelColor(i, RGBW32(r/2,g/2,b/2,0));                      // 50%
-      else strip.setPixelColor(i, 0);
+      if (d == 0 || d == 1) {
+        strip.setPixelColor(i, RGBW32(r,g,b,0)); // 100%, 100%
+      }
+      else if (d == -1) {
+        strip.setPixelColor(i, RGBW32(r*3/4,g*3/4,b*3/4,0)); // 75%
+      }
+      else if (d == -2 || d == 2 || d == 3) {
+        strip.setPixelColor(i, RGBW32(r/2,g/2,b/2,0)); // 50%
+      }
+      else {
+        strip.setPixelColor(i, 0);
+      }
     }
   }
 
-  // 🔥 geändert: neue LED blinkt 2x
+  // ✔ unverändert (inkl. blink fix)
   void drawProgressBar(float p) {
     uint16_t n = strip.getLengthTotal();
     uint16_t lit = max((uint16_t)1, (uint16_t)(p * n));
@@ -61,11 +67,11 @@ private:
     static int blinkIndex = -1;
     static unsigned long blinkUntil = 0;
 
-    if ((int)lit - 1 != lastLit) {
+    if (lastLit != -1 && (int)lit - 1 != lastLit) {
       blinkIndex = lit - 1;
       blinkUntil = millis() + 400;
-      lastLit = lit - 1;
     }
+    lastLit = lit - 1;
 
     bool blink = ((millis()/100)%2)==0;
 
@@ -77,7 +83,7 @@ private:
           strip.setPixelColor(i, RGBW32(0,255,0,0));
         }
       } else {
-        strip.setPixelColor(i, RGBW32(180,180,180,0)); // unverändert
+        strip.setPixelColor(i, RGBW32(180,180,180,0));
       }
     }
   }
