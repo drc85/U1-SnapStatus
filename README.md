@@ -8,6 +8,7 @@ Based on the WLED v2 usermod *Klipper Percentage*
 (https://github.com/Aircoookie/WLED) with Klipper API integration.
 
 Modified and extended by me **drc85**
+NOTE - all normal wled functions are disabled so there are nor crashes!!!
 
 ---
 
