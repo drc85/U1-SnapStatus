@@ -1,0 +1,9 @@
+{
+  "name": "usermod_v2_bambu_status",
+  "build": {
+    "libArchive": false
+  },
+  "dependencies": {
+    "knolleary/PubSubClient": "2.8"
+  }
+}
