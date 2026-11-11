@@ -1,129 +1,111 @@
-#Snapmaker U1 WLED Status Bar 
------------------------------
-U1Snapstatus V1.0
----------------------------
-WLED-based LED status bar for the Snapmaker U1.
+# Bambu WLED Status Bar – Testversion
 
-Based on the WLED v2 usermod *Klipper Percentage*  
-(https://github.com/Aircoookie/WLED) with Klipper API integration.
+Bambu-Anpassung von **U1 SnapStatus** für einen **Gledopto-Controller mit klassischem ESP32**.
 
-Modified and extended by me **drc85**
-NOTE - all normal wled functions are disabled so there are nor crashes!!!
+Die Leiste zeigt die Drucker-Statusanimationen. Ihre Beleuchtung ist immer an das gemeldete Kammerlicht gekoppelt – ohne zusätzlichen Schalter:
 
----
+- **Kammerlicht an:** Die Leiste zeigt den aktuellen Druckstatus.
+- **Kammerlicht aus:** Die Leiste bleibt dunkel.
+- **Keine MQTT-Verbindung oder noch kein Lichtstatus:** Die Leiste bleibt dunkel.
+- Bei ausgeschaltetem Drucker wird die Leiste nach Erkennung des Verbindungsabbruchs dunkel; das kann etwas dauern.
 
-<img width="416" height="179" alt="image" src="https://github.com/user-attachments/assets/edb1f97b-8a48-471c-828a-3d9becb80497" />
+## 1. Firmware herunterladen
 
+Dateiname: **`Bambu-WLED-Gledopto-ESP32-test.bin`**
 
- ---
- 
-## 🚦 LED States
+Die fertige Datei wurde für den ersten Test direkt im Projektgespräch bereitgestellt. Es gibt noch kein öffentliches GitHub-Release mit dieser Bambu-Firmware. Der Quellcode allein ist keine Datei für den WLED-Update-Dialog.
 
-## 🌊 Startup Animation (16 LEDs)
+Diese Datei ist ein **OTA-Update für den klassischen ESP32**. Sie ist keine vollständige USB-Erstinstallationsdatei und nicht für ESP8266, ESP32-C3, ESP32-S2 oder ESP32-S3 bestimmt.
 
-**⚪ Idle**  
-White breathing (smooth pulse)
+## 2. WLED aktualisieren
 
-**🟡 Preparing / Preheat**  
-Orange running light (→)  
-Pattern: 50% – 50% – 75% – 100% -100% – 50%
+1. Die Weboberfläche deines bestehenden WLED-Controllers öffnen.
+2. Unter **Config → Security & Updates** zunächst die Konfiguration sichern (**Backup configuration**). Falls Presets verwendet werden, auch diese sichern.
+3. **Manual OTA Update** öffnen. Je nach WLED-Version heißt der Punkt etwas anders.
+4. Die heruntergeladene `Bambu-WLED-Gledopto-ESP32-test.bin` auswählen und hochladen.
+5. Die Stromversorgung bis zum abgeschlossenen Update und Neustart angeschlossen lassen.
+6. WLED danach erneut öffnen. Falls noch die alte Oberfläche angezeigt wird, die Seite vollständig neu laden.
 
-**🟢 Printing**  
-Green progress bar  
-- New LED → blinks 2×  
-- Existing LEDs → stay solid  
-- Remaining LEDs → dim white
+Die vorhandenen LED-Einstellungen sollten beim OTA-Update erhalten bleiben. Prüfe danach unter **Config → LED Preferences** den LED-Typ, den Datenpin und die LED-Anzahl. Übernimm die Werte deiner funktionierenden Snapmaker-Konfiguration.
 
-**🔵 Paused**  
-Blue running light (same pattern as preheat)
+## 3. Bambu-Drucker einrichten
 
-**🔴 Error**  
-Fast red blinking (on/off)
+Controller und Drucker müssen sich im selben lokalen Netzwerk erreichen können.
 
-**🟢 Complete**  
-Fast green blinking (~20s) → returns to Idle
+1. Am Drucker **IP-Adresse**, **Seriennummer** und **LAN-Zugangscode** nachsehen. Die Menüpunkte hängen vom Druckermodell und der Firmware ab.
+2. In WLED **Config → Usermods → BambuLab** öffnen.
+3. Diese Felder ausfüllen:
 
----
+| Feld | Eingabe |
+| --- | --- |
+| Printer IP | Lokale IP-Adresse des Bambu-Druckers, ohne `http://` |
+| Serial number | Seriennummer des Druckers |
+| LAN access code | LAN-Zugangscode des Druckers, nicht das Bambu-Kontopasswort |
 
+4. Speichern. Falls die Verbindung nicht startet, den Controller einmal neu starten.
+5. Das Kammerlicht am Drucker einmal aus- und wieder einschalten.
 
-## 🔧 Requirements
+Die Lichtkopplung ist fest aktiv. Ein Snapmaker-API-Key oder Moonraker wird nicht benötigt.
 
-- WS2812 (or similar) LED strip  
- → **16 LEDs for ~27cm width**
-- ESP32 (or compatible)
-- Optional: ready-to-use USB WLED controller  
- → https://de.aliexpress.com/item/1005010502929150.html
-- 3 x 5mm - m3 pointed flathead screws
-- double sided 3M VHB tape
-- led mounting case two options availible
-- - one version with mount  for under the buildplate,
-- - the other version is a stand lone version , works also on the bottom or top of the printer or in any room with the same wifi!
- → https://makerworld.com/de/models/2686608-snapmaker-u1-led-status-bar-wled-esp32-gledopto#profileId-2976228
-- paxx firmware
-→ https://github.com/paxx12/SnapmakerU1-Extended-Firmware
+Die Verbindung läuft über lokales TLS-MQTT auf Port **8883**. Ob die benötigten Statusmeldungen im verwendeten Cloud-/LAN-Modus verfügbar sind, hängt vom Druckermodell und dessen Firmware ab. Die Kompatibilität mit dem konkreten Drucker muss noch getestet werden; ein bestimmter Modus wird hier nicht als Voraussetzung zugesichert.
 
-  
----
+## 4. Erster Funktionstest
 
-## 🚀 Installation
+1. In WLED das **Infofenster** öffnen:
+   - **Bambu MQTT** sollte **Connected** anzeigen.
+   - **Bambu chamber light** sollte **On** oder **Off** anzeigen.
+2. Im Standby das Kammerlicht ausschalten: Die externe Leiste muss dunkel werden.
+3. Kammerlicht einschalten: Die Leiste muss wieder den aktuellen Status anzeigen.
+4. Einen Druck starten und die Statusanzeige prüfen.
+5. Während des Drucks das Kammerlicht aus- und einschalten: Die Leiste soll anschließend den aktuellen Fortschritt anzeigen.
+6. Drucker ausschalten: Nach Erkennung des Verbindungsabbruchs soll die Leiste dunkel werden.
 
-NOTE: 
--FOR KLIPPER - you have to be on Paxx FW 
-→ https://github.com/paxx12/SnapmakerU1-Extended-Firmware
+Der Controller läuft mit seiner eigenen Stromversorgung. Ein Eingriff in die Druckerelektrik ist nicht erforderlich.
 
+## Statusanimationen
 
-### 1. Flash firmware
-- Download `firmware.bin`:  
-  https://github.com/drc85/snapmakerU1-wled-stauts-bar
-- Flash it to your ESP32 (e.g. via esptool or web flasher)
+| Druckerstatus | Anzeige |
+| --- | --- |
+| Start des Controllers | Bisherige 16-LED-Startanimation, sofern das Kammerlicht bereits als eingeschaltet gemeldet wird |
+| Standby | Weißes Pulsieren |
+| Vorbereitung | Oranges Lauflicht |
+| Drucken | Grüner Fortschrittsbalken, verbleibender Bereich weiß |
+| Pause | Blaues Lauflicht |
+| Fehler | Rotes Blinken |
+| Fertig | Etwa 20 Sekunden grünes Blinken, danach Standby |
 
-### 2. Set up WLED
-- Connect to WiFi
-- Open WLED Web UI
+Ein ausgeschaltetes Kammerlicht hat immer Vorrang vor der Statusanimation.
 
-### 3. Configure Usermod
-- Navigate to **Usermods**
-- New section: **SnapmakerU1**
+## Wenn die Leiste dunkel bleibt
 
-  
-  <img width="420" height="261" alt="Screenshot 2026-04-19 194245" src="https://github.com/user-attachments/assets/a6e5ad3b-25d1-4d37-b5a5-b3bbbb56d3e9" />
+- **MQTT: Disconnected:** IP, Seriennummer, LAN-Zugangscode und lokale Erreichbarkeit prüfen.
+- **Lichtstatus: Unknown:** Es wurde noch kein unterstützter Lichtstatus empfangen. Kammerlicht einmal aus-/einschalten und die Meldung erneut prüfen.
+- **Connected und On, aber keine LEDs:** WLED muss eingeschaltet sein und eine Helligkeit größer null haben. LED-Typ, Anzahl, Datenpin und Stromversorgung prüfen.
+- Derzeit wird der Lichtknoten **`chamber_light`** mit **`on`/`off`** ausgewertet. Abweichende Lichtknoten neuer Druckermodelle müssen gegebenenfalls ergänzt werden.
 
-**Enter:**
-- Printer IP  
-- API Key *(optional, leave empty if not used)
-➡️ Reboot the device (setup takes max ~10 minutes)
+Der LAN-Zugangscode wird als normale WLED-Konfiguration gespeichert. Konfigurationssicherungen daher nicht öffentlich teilen.
 
+## Stand der Testversion
 
+- Firmware für klassischen ESP32 erfolgreich kompiliert.
+- Firmwaregröße: **1.503.552 Byte**, passend zum verwendeten 1,5-MiB-OTA-Slot.
+- Image-Prüfsumme und Validierungshash mit esptool geprüft.
+- Einbindung des Bambu-Usermods im fertigen Programm bestätigt.
+- Verarbeitung von Teilmeldungen, Lichtzuständen und Druckstatus in Host-Tests geprüft.
+- **Noch kein Test auf einem echten Controller oder Bambu-Drucker.**
 
----
+Ungenutzte Matrix- und Partikeleffekte wurden für diese Firmware ausgeschlossen, damit sie in den OTA-Speicher passt. Die Statusanimationen bleiben enthalten.
 
+SHA-256 der Update-Datei:
 
-### 4. Print case
-- MakerWorld:  
-  https://makerworld.com/de/models/2686608-snapmaker-u1-led-status-bar-wled-esp32-gledopto#profileId-2976228
+```text
+44422656dfe659905d70b3a612203457a4de58cbb8f5337e3264a209599b44dc
+```
 
-**Available options:**
-- Under the build plate  
-- Directly on the bottom of the printer  
+## Quellcode
 
----
+- [Bambu-Usermod](usermod_v2_bambu_status/usermod_v2_bambu_status.cpp)
+- [Build-Versionen und technische Details](usermod_v2_bambu_status/BUILD.md)
+- [Originale Snapmaker-Version auf main](https://github.com/drc85/U1-SnapStatus/tree/main)
 
-### 5. Assemble hardware
-1. Place controller and LED inside  
-2. Screw on the top part  
-3. Add 3M VHB tape  
-4. Mount it inside the printer
-<img width="420" height="180" alt="image" src="https://github.com/user-attachments/assets/ea522f5e-bd8b-4361-b8d0-978f5f514507" />
-<img width="420" height="180" alt="image" src="https://github.com/user-attachments/assets/8d13583c-fad0-4b21-b87c-3d6b429655d4" />
-
-
----
-
-### 6. Cable routing
-- Route the cable through the ride side wall (with the build plate cable)
--when the sidewall is removed u can see flat cable goin through the bottom, u can use this hole so no drilling is required!!
-- for buildplate moutn fix the calbe ont he buildplate cable 
--for the stand version if u place it on the bottom of the printer u can just pull it through!
-https://www.youtube.com/watch?v=GgDL4Bqjk_Y
-<img width="420" height="180" alt="image" src="https://github.com/user-attachments/assets/5919114d-338d-4bf7-b61f-66079326c8c5" />
-
+Diese Anleitung gehört zum Branch **`bambu-chamber-light-sync`**.
