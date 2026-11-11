@@ -4,6 +4,8 @@
     "libArchive": false
   },
   "dependencies": {
-    "knolleary/PubSubClient": "2.8"
+    "PubSubClient": {
+      "version": "https://github.com/knolleary/pubsubclient.git#v2.8"
+    }
   }
 }

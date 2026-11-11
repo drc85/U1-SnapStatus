@@ -295,6 +295,15 @@ public:
     return true;
   }
 
+  void addToJsonInfo(JsonObject &root) override {
+    JsonObject info = root["u"];
+    if (info.isNull()) info = root.createNestedObject("u");
+    JsonArray connection = info.createNestedArray("Bambu MQTT");
+    connection.add(client.connected() ? "Connected" : "Disconnected");
+    JsonArray light = info.createNestedArray("Bambu chamber light");
+    light.add(!client.connected() || !lightKnown ? "Unknown" : (lightOn ? "On" : "Off"));
+  }
+
   uint16_t getId() override { return 0xBEEF; }
 };
 

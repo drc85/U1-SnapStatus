@@ -24,7 +24,11 @@ Use an ESP32 WLED checkout supporting REGISTER_USERMOD and ArduinoJson 6.
 Copy this folder into WLED's usermods folder and enable it in that WLED
 version's usermod build configuration. Build this usermod instead of the
 Snapmaker one (both use the same usermod ID).
-The library manifest declares PubSubClient 2.8.
+The library manifest declares PubSubClient v2.8 from its upstream Git repository.
+The shipped test build uses the full official Arduino ESP32 2.0.17 framework,
+which supplies WiFiClientSecure. The reduced Tasmota framework from the original
+Snapmaker build does not provide the required complete TLS client.
+See BUILD.md for the tested versions and firmware fingerprint.
 The platformio.ini in this repository belongs to the original Snapmaker
 build and does not automatically select this new usermod.
 
@@ -39,6 +43,11 @@ TLS is encrypted but the printer's self-signed certificate is not verified.
 The access code is saved as a normal WLED usermod setting; do not share config backups.
 
 ## Validation
-Experimental: not compiled against a WLED checkout and not tested on a printer.
+Compiled successfully for classic ESP32 / Gledopto (4 MB flash, DIO, 1.5 MiB OTA slot).
+Binary checksum and validation hash verified by esptool.
+Host tests passed for partial status reports, chamber-light node selection,
+light off/on, progress, pause, preparation, completion, errors and invalid JSON.
+Not yet tested on a physical controller or printer.
+The WLED Info window shows Bambu MQTT connection and chamber-light status.
 Verify build, settings persistence, initial state, partial reports, light off/on
 during printing and idle, and reconnect after printer power-off before release.
