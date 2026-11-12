@@ -14,9 +14,10 @@ and when the MQTT connection is lost, the strip stays dark.
 Printer shutdown is detected through MQTT disconnect/keepalive, not instantly.
 Partial reports preserve the previous light and print state.
 
-Animations: idle white pulse; prepare orange chase; print green progress;
-pause blue chase; failure red blink; finish green blink for 20 seconds.
-The existing 16-LED startup animation is retained and is also gated by the light.
+Display: static cool blue-white (RGB 200,225,255) for IDLE, STANDBY and RUNNING;
+red blinking for FAILED or nonzero print_error; static orange for every other state.
+No startup animation, breathing, progress bar or completion timer.
+The chamber light remains the master switch, including for error indications.
 
 ## Build
 This is source code, not a ready-to-flash firmware.
@@ -45,8 +46,8 @@ The access code is saved as a normal WLED usermod setting; do not share config b
 ## Validation
 Compiled successfully for classic ESP32 / Gledopto (4 MB flash, DIO, 1.5 MiB OTA slot).
 Binary checksum and validation hash verified by esptool.
-Host tests passed for partial status reports, chamber-light node selection,
-light off/on, progress, pause, preparation, completion, errors and invalid JSON.
+Host tests passed for partial status reports, static colors over time, all display states,
+error blinking, chamber-light priority and disconnection.
 Not yet tested on a physical controller or printer.
 The WLED Info window shows Bambu MQTT connection and chamber-light status.
 Verify build, settings persistence, initial state, partial reports, light off/on

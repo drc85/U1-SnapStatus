@@ -57,7 +57,7 @@ Die Verbindung läuft über lokales TLS-MQTT auf Port **8883**. Ob die benötigt
 2. Im Standby das Kammerlicht ausschalten: Die externe Leiste muss dunkel werden.
 3. Kammerlicht einschalten: Die Leiste muss wieder den aktuellen Status anzeigen.
 4. Einen Druck starten und die Statusanzeige prüfen.
-5. Während des Drucks das Kammerlicht aus- und einschalten: Die Leiste soll anschließend den aktuellen Fortschritt anzeigen.
+5. Während des Drucks das Kammerlicht aus- und einschalten: Die Leiste soll danach wieder statisch blauweiß leuchten.
 6. Drucker ausschalten: Nach Erkennung des Verbindungsabbruchs soll die Leiste dunkel werden.
 
 Der Controller läuft mit seiner eigenen Stromversorgung. Ein Eingriff in die Druckerelektrik ist nicht erforderlich.
@@ -66,13 +66,14 @@ Der Controller läuft mit seiner eigenen Stromversorgung. Ein Eingriff in die Dr
 
 | Druckerstatus | Anzeige |
 | --- | --- |
-| Start des Controllers | Bisherige 16-LED-Startanimation, sofern das Kammerlicht bereits als eingeschaltet gemeldet wird |
-| Standby | Weißes Pulsieren |
-| Vorbereitung | Oranges Lauflicht |
-| Drucken | Grüner Fortschrittsbalken, verbleibender Bereich weiß |
-| Pause | Blaues Lauflicht |
+| Standby / Idle | Statisches Blauweiß |
+| Drucken | Statisches Blauweiß, ohne Fortschrittsbalken |
 | Fehler | Rotes Blinken |
-| Fertig | Etwa 20 Sekunden grünes Blinken, danach Standby |
+| Alle anderen Zustände (Vorbereitung, Pause, fertig usw.) | Statisches Orange |
+
+Es gibt keine Startanimation, kein Pulsieren und keinen Fortschrittsbalken.
+Nach Einschalten des Kammerlichts erscheint direkt die Farbe des aktuellen Status.
+Die Standby-Lichteinstellung im Drucker entscheidet, ob das Kammerlicht im Standby an bleibt; die externe Leiste folgt diesem tatsächlichen Lichtzustand.
 
 Ein ausgeschaltetes Kammerlicht hat immer Vorrang vor der Statusanimation.
 
@@ -88,7 +89,7 @@ Der LAN-Zugangscode wird als normale WLED-Konfiguration gespeichert. Konfigurati
 ## Stand der Testversion
 
 - Firmware für klassischen ESP32 erfolgreich kompiliert.
-- Firmwaregröße: **1.503.552 Byte**, passend zum verwendeten 1,5-MiB-OTA-Slot.
+- Firmwaregröße: **1.498.624 Byte**, passend zum verwendeten 1,5-MiB-OTA-Slot.
 - Image-Prüfsumme und Validierungshash mit esptool geprüft.
 - Einbindung des Bambu-Usermods im fertigen Programm bestätigt.
 - Verarbeitung von Teilmeldungen, Lichtzuständen und Druckstatus in Host-Tests geprüft.
@@ -99,7 +100,7 @@ Ungenutzte Matrix- und Partikeleffekte wurden für diese Firmware ausgeschlossen
 SHA-256 der Update-Datei:
 
 ```text
-44422656dfe659905d70b3a612203457a4de58cbb8f5337e3264a209599b44dc
+4b85620ab8cab000d9d33af2143aa6ea01491fac99dfd70f08507308619896ba
 ```
 
 ## Quellcode

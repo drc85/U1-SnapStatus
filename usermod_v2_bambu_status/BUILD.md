@@ -13,7 +13,8 @@ OTA application image only; upload through WLED Manual OTA Update.
 - PubSubClient: v2.8
 - Only the Bambu usermod is selected (custom_usermods = bambu_status).
 - WiFiClientSecure comes from the full official framework, not a separate patched library.
-- Original usermod rendering and status mapping are retained.
+- Static blue-white for IDLE/STANDBY/RUNNING, static orange otherwise, red blinking for errors.
+No startup animation, progress bar, breathing or completion timer.
 
 Additional flags: ARDUINO_ARCH_ESP32, ESP32, ARDUINO_USB_CDC_ON_BOOT=0,
 CONFIG_ASYNC_TCP_USE_WDT=0, CONFIG_ASYNC_TCP_STACK_SIZE=8192,
@@ -25,10 +26,8 @@ WLED_DISABLE_PARTICLESYSTEM2D, WLED_DISABLE_PIXELFORGE.
 Matrix/particle features were excluded to fit the existing OTA slot.
 
 Binary: Bambu-WLED-Gledopto-ESP32-test.bin
-Size: 1503552 bytes
-SHA256: 44422656dfe659905d70b3a612203457a4de58cbb8f5337e3264a209599b44dc
-RAM (static): 86064 / 327680 bytes
-Flash (program): 1496857 / 1572864 bytes
+Size: 1498624 bytes
+SHA256: 4b85620ab8cab000d9d33af2143aa6ea01491fac99dfd70f08507308619896ba
 esptool image checksum and validation hash: valid.
 WLED post-link verification confirmed the Bambu usermod is present.
 
